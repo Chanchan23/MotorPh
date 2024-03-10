@@ -50,7 +50,6 @@ employee_data = [
     (32, "Castro", "John Rafael"),
     (33, "Martinez", "Carlos Ian"),
     (34, "Santos", "Beatriz"),
-    # Add more employee data here...
 ]
 
 # Create Employee instances
