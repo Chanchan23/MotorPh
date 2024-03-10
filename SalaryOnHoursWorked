@@ -1,0 +1,117 @@
+import java.time.LocalTime;
+
+public class SalaryOnHoursWorked {
+    private static final int START_HOUR = 8;
+    private static final int END_HOUR = 17;
+    private static final int GRACE_PERIOD_MINUTES = 10;
+    private static final double HOURLY_RATE = 535.71;
+    private static final double OVERTIME_RATE_MULTIPLIER = 1.5;
+
+    public static double calculateSalary(int hoursWorked) {
+        if (isOnTime()) {
+            if (hoursWorked <= 8) {
+                return hoursWorked * HOURLY_RATE;
+            } else {
+                double regularPay = 8 * HOURLY_RATE;
+                double overtimeHours = hoursWorked - 8;
+                double overtimePay = overtimeHours * HOURLY_RATE * OVERTIME_RATE_MULTIPLIER;
+                return regularPay + overtimePay;
+            }
+        } else {
+            // Apply late deduction or return 0 based on business logic
+            return 0.0;
+        }
+    }
+
+    private static boolean isOnTime() {
+        LocalTime currentTime = LocalTime.now();
+        int currentHour = currentTime.getHour();
+        int currentMinute = currentTime.getMinute();
+
+        LocalTime expectedStartTime = LocalTime.of(START_HOUR, 0);
+        LocalTime gracePeriodEndTime = expectedStartTime.plusMinutes(GRACE_PERIOD_MINUTES);
+
+        return (currentTime.isAfter(expectedStartTime) || currentTime.equals(expectedStartTime))
+                && currentTime.isBefore(LocalTime.of(END_HOUR, 0))
+                && (currentTime.isBefore(gracePeriodEndTime) || currentTime.equals(gracePeriodEndTime));
+    }
+}
+
+public class Employee {
+    private int employeeNumber;
+    private String lastName;
+    private String firstName;
+    private int hoursWorked;
+
+    public Employee(int employeeNumber, String lastName, String firstName, int hoursWorked) {
+        this.employeeNumber = employeeNumber;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.hoursWorked = hoursWorked;
+    }
+
+    public int getEmployeeNumber() {
+        return employeeNumber;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public int getHoursWorked() {
+        return hoursWorked;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Create an array of employees with their respective hours worked
+        Employee[] employees = {
+            new Employee(1, "Garcia", "Manuel III", 8),
+            new Employee(2, "Lim", "Antonio", 9),
+            new Employee(3, "Aquino", "Bianca Sofia", 9),
+            new Employee(4, "Reyes", "Isabella", 8),
+            new Employee(5, "Hernandez", "Eduard", 8),
+            new Employee(6, "Villanueva", "Andrea Mae", 7),
+            new Employee(7, "San Jose", "Brad", 9),
+            new Employee(8, "Romualdez", "Alice", 9),
+            new Employee(9, "Atienza", "Rosie", 8),
+            new Employee(10, "Alvaro", "Roderick", 9),
+            new Employee(11, "Salcedo", "Anthony", 8),
+            new Employee(12, "Lopez", "Josie", 8),
+            new Employee(13, "Farala", "Martha", 9),
+            new Employee(14, "Martinez", "Leila", 8),
+            new Employee(15, "Romualdez", "Fredrick", 8),
+            new Employee(16, "Mata", "Christian", 9),
+            new Employee(17, "De Leon", "Selena", 8),
+            new Employee(18, "San Jose", "Allison", 7),
+            new Employee(19, "Rosario", "Cydney", 9),
+            new Employee(20, "Bautista", "Mark", 8),
+            new Employee(21, "Lazaro", "Darlene", 8),
+            new Employee(22, "Delos Santos", "Kolby", 9),
+            new Employee(23, "Santos", "Vella", 8),
+            new Employee(24, "Del Rosario", "Tomas", 9),
+            new Employee(25, "Tolentino", "Jacklyn", 8),
+            new Employee(26, "Gutierrez", "Percival", 9),
+            new Employee(27, "Manalaysay", "Garfield", 8),
+            new Employee(28, "Villegas", "Lizeth", 9),
+            new Employee(29, "Ramos", "Carol", 8),
+            new Employee(30, "Maceda", "Emelia", 9),
+            new Employee(31, "Aguilar", "Delia", 8),
+            new Employee(32, "Castro", "John Rafael", 9),
+            new Employee(33, "Martinez", "Carlos Ian", 8),
+            new Employee(34, "Santos", "Beatriz", 8)
+            
+        };
+
+        // Iterate over all employees and calculate their salaries
+        for (Employee emp : employees) {
+            double salary = SalaryOnHoursWorked.calculateSalary(emp.getHoursWorked());
+            System.out.println("Employee #" + emp.getEmployeeNumber() + ": " + emp.getFirstName() + " " + emp.getLastName() + " - Salary: $" + salary);
+        }
+    }
+}
