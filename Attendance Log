@@ -1,1 +1,69 @@
+import datetime
+
+class Employee:
+    def __init__(self, emp_id, last_name, first_name):
+        self.emp_id = emp_id
+        self.last_name = last_name
+        self.first_name = first_name
+        self.attendance_log = []
+
+    def log_attendance(self, status):
+        timestamp = datetime.datetime.now()
+        self.attendance_log.append((timestamp, status))
+
+    def view_attendance_log(self):
+        for entry in self.attendance_log:
+            print(f"Date and Time: {entry[0]}, Status: {entry[1]}")
+
+employee_data = [
+    (1, "Garcia", "Manuel III"),
+    (2, "Lim", "Antonio"),
+    (3, "Aquino", "Bianca Sofia"),
+    (4, "Reyes", "Isabella"),
+    (5, "Hernandez", "Eduard"),
+    (6, "Villanueva", "Andrea Mae"),
+    (7, "San Jose", "Brad"),
+    (8, "Romualdez", "Alice"),
+    (9, "Atienza", "Rosie"),
+    (10, "Alvaro", "Roderick"),
+    (11, "Salcedo", "Anthony"),
+    (12, "Lopez", "Josie"),
+    (13, "Farala", "Martha"),
+    (14, "Martinez", "Leila"),
+    (15, "Romualdez", "Fredrick"),
+    (16, "Mata", "Christian"),
+    (17, "De Leon", "Selena"),
+    (18, "San Jose", "Allison"),
+    (19, "Rosario", "Cydney"),
+    (20, "Bautista", "Mark"),
+    (21, "Lazaro", "Darlene"),
+    (22, "Delos Santos", "Kolby"),
+    (23, "Santos", "Vella"),
+    (24, "Del Rosario", "Tomas"),
+    (25, "Tolentino", "Jacklyn"),
+    (26, "Gutierrez", "Percival"),
+    (27, "Manalaysay", "Garfield"),
+    (28, "Villegas", "Lizeth"),
+    (29, "Ramos", "Carol"),
+    (30, "Maceda", "Emelia"),
+    (31, "Aguilar", "Delia"),
+    (32, "Castro", "John Rafael"),
+    (33, "Martinez", "Carlos Ian"),
+    (34, "Santos", "Beatriz"),
+    # Add more employee data here...
+]
+
+# Create Employee instances
+employees = [Employee(emp[0], emp[1], emp[2]) for emp in employee_data]
+
+# Simulate logging attendance for each employee
+for emp in employees:
+    emp.log_attendance("In")
+    emp.log_attendance("Out")
+
+# View attendance log for all employees
+for emp in employees:
+    print(f"Attendance Log for {emp.first_name} {emp.last_name}:")
+    emp.view_attendance_log()
+    print()
 
