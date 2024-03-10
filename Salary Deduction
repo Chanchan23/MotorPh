@@ -1,0 +1,105 @@
+import java.util.*;
+
+public class SalaryCalculator {
+    public static void main(String[] args) {
+        // Assume the data is stored in an array of Employee objects
+        Employee[] employees = {
+            new Employee(1, "Garcia", "Manuel III", 90000, 1500, 2000, 1000),
+            new Employee(2, "Lim", "Antonio", 60000, 1500, 2000, 1000),
+            new Employee(3, "Aquino", "Bianca Sofia", 60000, 1500, 2000, 1000),
+            new Employee(4, "Reyes", "Isabella", 60000, 1500, 2000, 1000),
+            new Employee(5, "Hernandez", "Eduard", 52670, 1500, 1000, 1000),
+            new Employee(6, "Villanueva", "Andrea Mae", 52670, 1500, 1000, 1000),
+            new Employee(7, "San Jose", "Brad", 42975, 1500, 800, 800),
+            new Employee(8, "Romualdez", "Alice", 22500, 1500, 500, 500),
+            new Employee(9, "Atienza", "Rosie", 22500, 1500, 500, 500),
+            new Employee(10, "Alvaro", "Roderick", 52670, 1500, 1000, 1000),
+            new Employee(11, "Salcedo", "Anthony", 50825, 1500, 1000, 1000),
+            new Employee(12, "Lopez", "Josie", 38475, 1500, 800, 800),
+            new Employee(13, "Farala", "Martha", 24000, 1500, 500, 500),
+            new Employee(14, "Martinez", "Leila", 24000, 1500, 500, 500),
+            new Employee(15, "Romualdez", "Fredrick", 53500, 1500, 1000, 1000),
+            new Employee(16, "Mata", "Christian", 42975, 1500, 800, 800),
+            new Employee(17, "De Leon", "Selena", 41850, 1500, 800, 800),
+            new Employee(18, "San Jose", "Allison", 22500, 1500, 500, 500),
+            new Employee(19, "Rosario", "Cydney", 22500, 1500, 500, 500),
+            new Employee(20, "Bautista", "Mark", 23250, 1500, 500, 500),
+            new Employee(21, "Lazaro", "Darlene", 23250, 1500, 500, 500),
+            new Employee(22, "Delos Santos", "Kolby", 24000, 1500, 500, 500),
+            new Employee(23, "Santos", "Vella", 22500, 1500, 500, 500),
+            new Employee(24, "Del Rosario", "Tomas", 22500, 1500, 500, 500),
+            new Employee(25, "Tolentino", "Jacklyn", 24000, 1500, 500, 500),
+            new Employee(26, "Gutierrez", "Percival", 24750, 1500, 500, 500),
+            new Employee(27, "Manalaysay", "Garfield", 24750, 1500, 500, 500),
+            new Employee(28, "Villegas", "Lizeth", 24000, 1500, 500, 500),
+            new Employee(29, "Ramos", "Carol", 22500, 1500, 500, 500),
+            new Employee(30, "Maceda", "Emelia", 22500, 1500, 500, 500),
+            new Employee(31, "Aguilar", "Delia", 22500, 1500, 500, 500),
+            new Employee(32, "Castro", "John Rafael", 52670, 1500, 1000, 1000),
+            new Employee(33, "Martinez", "Carlos Ian", 52670, 1500, 1000, 1000),
+            new Employee(34, "Santos", "Beatriz", 52670, 1500, 1000, 1000)
+        };
+
+        // Iterate over each employee and calculate deductions
+        for (Employee emp : employees) {
+            double sss = calculateSSS(emp.getBasicSalary());
+            double philHealth = calculatePhilHealth(emp.getBasicSalary());
+            double pagIbig = calculatePagIbig(emp.getBasicSalary());
+            double totalDeductions = sss + philHealth + pagIbig;
+            double netSalary = emp.getGrossSemiMonthlyRate() - totalDeductions;
+
+            // Print or store the net salary for each employee
+            System.out.println("Employee #" + emp.getEmployeeNumber() + ": Net Salary = " + netSalary);
+        }
+    }
+
+    // Method to calculate SSS contribution
+    public static double calculateSSS(double basicSalary) {
+        // Implement SSS deduction calculation logic here
+        // For simplicity, let's assume a fixed deduction rate
+        return basicSalary * 0.10;
+    }
+
+    // Method to calculate PhilHealth contribution
+    public static double calculatePhilHealth(double basicSalary) {
+        // Implement PhilHealth deduction calculation logic here
+        // For simplicity, let's assume a fixed deduction rate
+        return basicSalary * 0.05;
+    }
+
+    // Method to calculate Pag-ibig contribution
+    public static double calculatePagIbig(double basicSalary) {
+        // Implement Pag-ibig deduction calculation logic here
+        // For simplicity, let's assume a fixed deduction rate
+        return basicSalary * 0.03;
+    }
+
+    // Employee class definition
+    static class Employee {
+        private int employeeNumber;
+        private String lastName;
+        private String firstName;
+        private double basicSalary;
+        private double grossSemiMonthlyRate;
+
+        public Employee(int employeeNumber, String lastName, String firstName, double basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance) {
+            this.employeeNumber = employeeNumber;
+            this.lastName = lastName;
+            this.firstName = firstName;
+            this.basicSalary = basicSalary;
+            this.grossSemiMonthlyRate = basicSalary + riceSubsidy + phoneAllowance + clothingAllowance;
+        }
+
+        public int getEmployeeNumber() {
+            return employeeNumber;
+        }
+
+        public double getBasicSalary() {
+            return basicSalary;
+        }
+
+        public double getGrossSemiMonthlyRate() {
+            return grossSemiMonthlyRate;
+        }
+    }
+}
