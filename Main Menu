@@ -1,0 +1,152 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        displayMainMenu();
+    }
+
+    private static void displayMainMenu() {
+        Scanner scanner = new Scanner(System.in);
+        EmployeeSheet empSheet = new EmployeeSheet();
+        SalaryCalculation salaryCalculation = new SalaryCalculation();
+        GovernmentDeduction govDeduction = new GovernmentDeduction(); 
+    
+        int choice;
+    
+        do {
+            System.out.println("***********************************************");
+            System.out.println("        Motor PH Main Menu      ");
+            System.out.println("***********************************************");
+            System.out.println("1: Display Employee Information     ");
+            System.out.println("2: Calculate Net Salary         ");
+            System.out.println("3: Calculate Salary based on Hours Worked ");
+            System.out.println("4: Exit");
+            System.out.println("************************************************");
+    
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+    
+            switch (choice) {
+                case 1:
+                    displayEmployeeInformation(scanner, empSheet);
+                    break;
+                case 2:
+                    calculateNetSalary(scanner, empSheet, salaryCalculation, govDeduction);
+                    break;
+                case 3:
+                    calculateSalaryBasedOnHoursWorked(scanner);
+                    break;
+                case 4:
+                    System.out.println("Exiting program...");
+                    break;
+                default:
+                    System.out.println("Invalid choice");
+                    break;
+            }
+        } while (choice != 4);
+    
+        // Close the scanner outside the loop
+        scanner.close();
+    }
+    
+
+    private static void displayEmployeeInformation(Scanner scanner, EmployeeSheet empSheet) {
+        System.out.println("******************** Display Employee Information ********************");
+        System.out.print("Enter employee number to display information: ");
+        int employeeNumber = scanner.nextInt();
+        empSheet.displayEmployee(employeeNumber);
+    }
+
+    private static void calculateNetSalary(Scanner scanner, EmployeeSheet empSheet, SalaryCalculation salaryCalculation, GovernmentDeduction govDeduction) {
+        System.out.print("Enter employee number to calculate net salary: ");
+        int employeeNumber = scanner.nextInt();
+        
+        // Assuming you have methods to get the basic, riceSub, phoneAllow, and clothingAllow values from the EmployeeSheet
+        int basic = empSheet.getBasicSalary(employeeNumber);
+        int riceSub = empSheet.getRiceSubsidy(employeeNumber);
+        int phoneAllow = empSheet.getPhoneAllowance(employeeNumber);
+        int clothingAllow = empSheet.getClothingAllowance(employeeNumber);
+        
+        // Calculate the total deductions using the GovernmentDeduction class
+        double sssDeduction = govDeduction.calculateSSSDeduction(basic);
+        double philhealthDeduction = govDeduction.calculatePhilhealthDeduction(basic);
+        double pagibigDeduction = govDeduction.calculatePagIbigDeduction(basic);
+        double riceSubsidy = empSheet.getRiceSubsidy(employeeNumber);
+        double phoneAllowance = empSheet.getPhoneAllowance(employeeNumber);
+        double clothingAllowance = empSheet.getClothingAllowance(employeeNumber);
+
+        double totalDeductions = govDeduction.calculateTotalDeductions(riceSubsidy, phoneAllowance, clothingAllowance, sssDeduction, philhealthDeduction, pagibigDeduction);
+
+        // Calculate the net salary
+        int netSalary = salaryCalculation.calculateNetSalary(basic, riceSub, phoneAllow, clothingAllow, totalDeductions);
+        if (netSalary != -1) {
+            double withholdingTax = govDeduction.calculateWithholdingTax(netSalary);
+            // Print the payslip
+            govDeduction.displayPayslip(basic, riceSub, phoneAllow, clothingAllow, sssDeduction, philhealthDeduction, pagibigDeduction, withholdingTax, totalDeductions, netSalary);
+        
+            
+        }
+        scanner.close();
+    }
+
+    private static void calculateSalaryBasedOnHoursWorked(Scanner scanner) {
+        // Ask the user to input the employee number
+        System.out.print("Enter employee number to calculate salary based on hours worked: ");
+        int employeeNumber = scanner.nextInt();
+
+        // Read the attendance log file and calculate salaries based on hours worked
+        String filename = "AttendanceLog.txt";
+        try {
+            File file = new File(filename);
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] record = line.split("\\|");
+
+                // Check if the employee number matches the one provided by the user
+                if (Integer.parseInt(record[0]) == employeeNumber) { // Assuming employee number is at index 1
+                    int hoursWorked = calculateHoursWorked(record);
+                    double salary = SalaryOnHoursWorked.calculateSalary(hoursWorked);
+                    System.out.println("Employee ID: " + record[1] + ", Salary: Php" + salary);
+                }
+            }
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filename);
+        }
+    }
+
+    private static int calculateHoursWorked(String[] record) {
+        if (record.length >= 6) {
+            String startTimeStr = record[4]; // Assuming start time is at index 4
+            String endTimeStr = record[5]; // Assuming end time is at index 5
+    
+            try {
+                // Parse start and end times
+                LocalTime startTime = LocalTime.parse(startTimeStr, DateTimeFormatter.ofPattern("H:mm"));
+                LocalTime endTime = LocalTime.parse(endTimeStr, DateTimeFormatter.ofPattern("H:mm"));
+    
+                // Calculate hours worked
+                int hoursWorked = endTime.getHour() - startTime.getHour();
+                if (endTime.getMinute() > startTime.getMinute()) {
+                    hoursWorked += 1;
+                }
+    
+                return hoursWorked;
+            } catch (DateTimeParseException e) {
+                System.out.println("Error parsing time: " + e.getMessage());
+                return -1; // Or any appropriate default value
+            }
+        } else {
+            System.out.println("Invalid record: Null or insufficient elements");
+            return -1; // Or any appropriate default value
+        }
+    }
+
+}
+    
