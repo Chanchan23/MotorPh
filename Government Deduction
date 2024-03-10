@@ -1,0 +1,104 @@
+public class GovernmentDeduction {
+    // Method to calculate SSS deduction
+    public double calculateSSSDeduction(int basicSalary) {
+        double sssDeduction = 1125; // Default value for SSS deduction
+        
+        // Calculate SSS deduction based on basic salary
+        switch (basicSalary) {
+            case 23750:
+            case 2750:
+                sssDeduction = 1080;
+                break;
+            case 24750:
+                sssDeduction = 1102.50;
+                break;
+            default:
+                sssDeduction = 1125.50;
+                break;
+        }
+        
+        return sssDeduction;
+    }
+    
+    // Method to calculate Philhealth deduction
+    public double calculatePhilhealthDeduction(int basicSalary) {
+        double philhealthDeduction = 300; // Default value for Philhealth deduction
+        
+        // Calculate Philhealth deduction based on basic salary
+        if (basicSalary <= 10000) {
+            philhealthDeduction = 300;
+        } else if (basicSalary >= 10000.01 && basicSalary <= 59999.99) {
+            philhealthDeduction = 1800;
+        } else {
+            philhealthDeduction = 1800;
+        }
+        
+        return philhealthDeduction;
+    }
+    
+    // Method to calculate Pag-ibig deduction
+    public double calculatePagIbigDeduction(int basicSalary) {
+        double pagibigDeduction; // No default value for Pag-ibig deduction
+        
+        // Calculate Pag-ibig deduction based on basic salary
+        if (basicSalary >= 1000 && basicSalary <= 1500) {
+            pagibigDeduction = basicSalary * 0.03;
+        } else {
+            pagibigDeduction = basicSalary * 0.04;
+        }
+        
+        return pagibigDeduction;
+    }
+
+    public double calculateWithholdingTax(double netSalary) {
+        double withholdingTax = 0;
+        if (netSalary > 20832) {
+            if (netSalary <= 33333) {
+                withholdingTax = (netSalary - 20833) * 0.20;
+            } else if (netSalary <= 66667) {
+                withholdingTax = 2500 + (netSalary - 33333) * 0.25;
+            } else if (netSalary <= 166667) {
+                withholdingTax = 10833 + (netSalary - 6667) * 0.30;
+            } else if (netSalary <= 666667) {
+                withholdingTax = 40833.33 + (netSalary - 166667) * 0.32;
+            } else {
+                withholdingTax = 200833.33 + (netSalary - 666667) * 0.35;
+            }
+        }
+        return withholdingTax;
+    }
+
+    
+    
+    // Method to calculate total deductions
+    public double calculateTotalDeductions(double riceSubsidy, double phoneAllowance, double clothingAllowance,  double sssDeduction, double philhealthDeduction, double pagibigDeduction) {
+        // Calculate and return total deductions
+        double totalDeductions = riceSubsidy + phoneAllowance + clothingAllowance + sssDeduction + philhealthDeduction + pagibigDeduction;
+        return totalDeductions;
+    }
+
+    public double calculateTaxableIncome(double basicSalary, double totalDeductions) {
+        // Calculate taxable income
+        double taxableIncome = basicSalary - totalDeductions;
+        return taxableIncome;
+    }
+    
+    // Method to display payslip
+    public void displayPayslip(int basicSalary, double riceSubsidy, double phoneAllowance, double clothingAllowance, double sssDeduction, double philhealthDeduction, double pagibigDeduction, double withholdingTax, double totalDeductions, double netSalary) {
+        // Print payslip information
+        System.out.println("***************************************************");
+        System.out.println("                   Motor PH PAYSLIP               ");
+        System.out.println("***************************************************");
+        System.out.println("Monthly Salary                                    : " + basicSalary);
+        System.out.println("Rice Subsidy                                      : " + riceSubsidy);
+        System.out.println("Phone Allowance                                   : " + phoneAllowance);
+        System.out.println("Clothing Allowance                                : " + clothingAllowance);
+        System.out.println("SSS Deduction                                     : " + sssDeduction);
+        System.out.println("Philhealth Deduction                              : " + philhealthDeduction);
+        System.out.println("Pag Ibig Deduction                                : " + pagibigDeduction);
+        System.out.println("Withholding Tax                                   : " + withholdingTax);
+        System.out.println("TOTAL AMOUNT DEDUCTION                            : " + totalDeductions);
+        System.out.println("TAXABLE INCOME (Salary - Total Deduction)         : " + (basicSalary - totalDeductions));
+        System.out.println();
+    }
+}
